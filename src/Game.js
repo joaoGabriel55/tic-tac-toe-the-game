@@ -1,12 +1,21 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import Cell from "./components/Cell";
 import InfoModal from "./components/InfoModal";
 import useGameEngine from "./useGameEngine";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function Game() {
-  const { cells, gameBoard, winner, isDraw, clickCell, finishGame, resetGame } =
-    useGameEngine();
+  const {
+    currentPlayer,
+    cells,
+    gameBoard,
+    winner,
+    isDraw,
+    clickCell,
+    finishGame,
+    resetGame,
+  } = useGameEngine();
   const [gameMessage, setGameMessage] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -16,7 +25,7 @@ export default function Game() {
   }
 
   useEffect(() => {
-    if (winner) setGameMessage(`${winner} wins!`);
+    if (winner) setGameMessage(`"${winner}" wins!`);
     if (isDraw) setGameMessage("It's a draw!");
 
     if (winner || isDraw) {
@@ -26,7 +35,12 @@ export default function Game() {
   }, [winner, isDraw]);
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      style={styles.container}
+      colors={["blue", "green"]}
+      start={{ x: 0.7, y: 0 }}
+    >
+      <Text style={styles.currentPlayer}>Current Player: {currentPlayer}</Text>
       <View style={styles.board}>
         {Array.from({ length: cells }).map((_, index) => (
           <Cell
@@ -42,7 +56,7 @@ export default function Game() {
         message={gameMessage}
         onClose={() => closeModal()}
       />
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -52,10 +66,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  currentPlayer: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "white",
+  },
   board: {
+    justifyContent: "center",
     flexDirection: "row",
     flexWrap: "wrap",
-    width: 300,
+    width: 400,
     height: 300,
   },
 });

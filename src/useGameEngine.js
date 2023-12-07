@@ -83,6 +83,7 @@ export default function useGameEngine(rowsAndCols = 3) {
   }
 
   return {
+    currentPlayer,
     cells,
     winner,
     isDraw,
